@@ -7,10 +7,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Load environment variables from .env file in the backend directory
 load_dotenv(BASE_DIR / ".env")
 
-SECRET_KEY = os.getenv("SECRET_KEY")
-DEBUG = os.getenv("DEBUG") == "True"
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-change-this-in-production")
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ["*"]
+# Parse ALLOWED_HOSTS from environment variable or use localhost for development
+ALLOWED_HOSTS_ENV = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1")
+ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS_ENV.split(",")]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
